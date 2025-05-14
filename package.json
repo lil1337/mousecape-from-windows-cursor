@@ -1,6 +1,6 @@
 {
   "name": "mousecape-from-windows-cursor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Converts Windows cursors to macOS Mousecape .cape files",
   "main": "out/index.js",
   "type": "module",

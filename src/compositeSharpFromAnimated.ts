@@ -1,16 +1,20 @@
-import { parseAni } from "parseAniCursor";
+import { parseAni, ParsedAni } from "parseAniCursor";
 import sharp, { Sharp } from "sharp";
 import { ParsedCursor, sharpFromCursor } from "sharpFromCursor";
 import { IParsedCursor } from "types/IParsedCursor";
+
+export function sharpFromAnimated(buffer: Buffer): {ani: ParsedAni, frames: Promise<ParsedCursor[]>} {
+    const ani = parseAni(buffer);
+    return{ani, frames: Promise.all(ani.images.map(sharpFromCursor))}
+}
 
 
 
 export async function compositeSharpFromAnimated(buffer: Buffer): Promise<IParsedCursor & {
     frames: ParsedCursor[]
 }> {
-    const ani = parseAni(buffer);
-   
-    const frames = ani.images.map(sharpFromCursor);
+    const {ani, frames: _frames} = sharpFromAnimated(buffer);
+    const frames = await _frames;
 
     const composite = sharp({
         create: {

@@ -9,7 +9,7 @@ import { stringifyMousecape } from "stringifyMousecape";
 
 import { name, version } from "../package.json";
 import { inspect } from "util";
-import { compositeSharpFromAnimated } from "compositeSharpFromAnimated";
+import { compositeSharpFromAnimated, sharpFromAnimated } from "compositeSharpFromAnimated";
 import { quickLookAt } from "quickLookAt";
 import { buildCursor } from "buildCursor";
 
@@ -28,6 +28,7 @@ function help() {
         
 Options: 
     -d, --dump           Only convert .cur or .ani to .png instead of creating a cape
+    -s, --separate-ani   Convert .ani to multiple .png's instead of composite (only applies to -d)
     -h, --help
 
   
@@ -73,11 +74,20 @@ async function build(installInfPath: string, mousecapePath?: string) {
 
 
 
-async function dump(cursor: string, to: string) {
+async function dump(cursor: string, to: string, separateFrames: boolean = false) {
+
+    if (cursor.endsWith(".ani") && separateFrames){
+        const {ani, frames} = sharpFromAnimated(await readFile(cursor));
+        return await Promise.all((await frames).map(async (frame, i) => {
+            const framePng = await frame.sharp.png().toBuffer();
+            if (to == "-") process.stdout.write(framePng);
+            else await writeFile(resolve(to, `${to}.${i}.png`), framePng);
+        }))
+    }
 
     const capeCursor = await buildCursor(await readFile(cursor), cursor.endsWith(".ani"));
     if (to == "-") return process.stdout.write(capeCursor.representations[0]);
-    else await writeFile(to, capeCursor.representations[0]);
+    else await writeFile(to + ".png", capeCursor.representations[0]);
 
 }
 
@@ -127,15 +137,18 @@ async function dump(cursor: string, to: string) {
             console.error(`Cannot convert multiple files to a single file: ${to}`); process.exit(1)
         }
 
+        const separate = process.argv.includes("-s") || process.argv.includes("--separate-ani");
+
         await Promise.all(filesToDump.map(f => {
             
             let finalTo = isToADirectory ? resolve(to, basename(f) + ".png") : to;
 
-            if (!finalTo) finalTo = resolve(f + ".png");
+            if (!finalTo) finalTo = resolve(f);
 
-            console.error(`${f}  ->  ${finalTo}`);
+            if (!separate) console.error(`${f}  ->  ${finalTo}.png`);
+            else console.error(`${f}  ->  ${finalTo}.X.png`);
 
-            return dump(f, finalTo);
+            return dump(f, finalTo, separate);
         }));
 
         console.error("\nDone!");

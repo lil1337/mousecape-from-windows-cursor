@@ -5,7 +5,7 @@ import pkg from "riff-file";
 const { RIFFFile } = pkg;
 import { unpackArray, unpackString } from "byte-data";
 
-type Chunk = {
+export type Chunk = {
   format: string;
   chunkId: string;
   chunkData: {
@@ -16,7 +16,7 @@ type Chunk = {
 };
 
 // https://www.informit.com/articles/article.aspx?p=1189080&seqNum=3
-type AniMetadata = {
+export type AniMetadata = {
   cbSize: number; // Data structure size (in bytes)
   nFrames: number; // Number of images (also known as frames) stored in the file
   nSteps: number; // Number of frames to be displayed before the animation repeats
@@ -28,7 +28,7 @@ type AniMetadata = {
   bfAttributes: number; // ANI attribute bit flags
 };
 
-type ParsedAni = {
+export type ParsedAni = {
   rate: number[] | null;
   seq: number[] | null;
   images: Uint8Array[];

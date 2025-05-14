@@ -1,0 +1,31 @@
+{
+  "name": "mousecape-from-windows-cursor",
+  "version": "1.0.0",
+  "description": "Converts Windows cursors to macOS Mousecape .cape files",
+  "main": "out/index.js",
+  "type": "module",
+  "bin": "out/cli.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup && node --enable-source-maps out/cli /Users/eatthelil/Downloads/miku-cursor-windows/Install.inf"
+  },
+  "keywords": [
+    "mousecape",
+    "macos"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lil1337/mousecape-from-windows-cursor"
+  },
+  "author": "lil1337",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "tsup": "^8.4.0"
+  },
+  "dependencies": {
+    "byte-data": "^19.0.1",
+    "riff-file": "^1.0.3",
+    "sharp": "^0.34.1"
+  }
+}

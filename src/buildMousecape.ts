@@ -18,7 +18,7 @@ export async function buildMousecape(
     )));
 
     const builtCursors = Object.entries(cursors).reduce((acc, [key, cursor]) => {
-        if (!windowsCursorKeyToMac[key]) acc[randomUUID().toUpperCase()] = windowsBuiltCursors[key];
+        if (!windowsCursorKeyToMac[key]) acc[randomUUID().toUpperCase().replaceAll("-", "")] = windowsBuiltCursors[key];
         else windowsCursorKeyToMac[key]!.map((e: MacCursorKeys) =>{
             acc[e] = windowsBuiltCursors[key]
         });

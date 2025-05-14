@@ -1,10 +1,13 @@
 export const windowsCursorKeyToMac = {
     "pointer": ["com.apple.coregraphics.Arrow"],
     "help": ["com.apple.cursor.40"],
-    "working": ["com.apple.cursor.4", "com.apple.coregraphics.Wait"],
+    "working": ["com.apple.coregraphics.Wait", "com.apple.cursor.4"],
+    "work": ["com.apple.coregraphics.Wait", "com.apple.cursor.4"],
+    "busy": ["com.apple.cursor.4", "com.apple.coregraphics.Wait"],
     "precision": ["com.apple.cursor.20", "com.apple.cursor.41", "com.apple.cursor.7", "com.apple.cursor.8"],
+    "cross": ["com.apple.cursor.20", "com.apple.cursor.41", "com.apple.cursor.7", "com.apple.cursor.8"],
     "text": ["com.apple.coregraphics.IBeam"],
-    "unavailable": ["com.apple.cursor.25", "com.apple.cursor.3"],
+    "unavailiable": ["com.apple.cursor.25", "com.apple.cursor.3"],
     "vert": ["com.apple.cursor.32"],
     "horz": ["com.apple.cursor.28"],
     "dgn1": ["com.apple.cursor.34"],
@@ -17,6 +20,7 @@ export type WindowsCursorKeys = keyof typeof windowsCursorKeyToMac;
 export type MacCursorKeys = typeof windowsCursorKeyToMac[WindowsCursorKeys][number];
 
 export type InstallInfStrings = {
+    INF_Provider?: string;
     CUR_DIR: string;
     SCHEME_NAME: string;
     alternate: string;

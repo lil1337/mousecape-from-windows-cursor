@@ -31,7 +31,7 @@ const install = parseInstall(await readFile(installInfPath, "utf8"));
 
 // create { ["fileName.cur"]: { cursor: Buffer, animated?: boolean } } object
 const cursors = await Promise.all(Object.entries(install)
-    .filter(([e]) => !["CUR_DIR", "SCHEME_NAME"].includes(e))
+    .filter(([e]) => e == e.toLowerCase())
     .map(
         async ([cursor, path]) => ([
             cursor, {
@@ -42,8 +42,8 @@ const cursors = await Promise.all(Object.entries(install)
 
 // create cape
 const cape = await buildMousecape(Object.fromEntries(cursors), {
-    author: "you",
-    capeName: install.SCHEME_NAME
+    author: install.INF_Provider ?? "you",
+    capeName: install.SCHEME_NAME ?? "Unnamed"
 });
 
 // and stringify it to plist

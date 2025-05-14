@@ -1,4 +1,6 @@
+import { buildCursor } from "buildCursor";
 import { compositeSharpFromAnimated } from "compositeSharpFromAnimated";
+import { randomUUID } from "crypto";
 import { MacCursorKeys, WindowsCursorKeys } from "parseInstall";
 import { windowsCursorKeyToMac } from "parseInstall";
 import { sharpFromCursor } from "sharpFromCursor";
@@ -11,23 +13,13 @@ export async function buildMousecape(
     o?: Partial<ICape>
 ): Promise<Cape> {
 
-    cursors = Object.fromEntries(
-        Object.entries(cursors).filter(([key]) => (key in windowsCursorKeyToMac))
-    );
-
     const windowsBuiltCursors = Object.fromEntries(await Promise.all(Object.entries(cursors).map(
-        async ([key, {cursor, animated}]) =>
-            await (animated ? compositeSharpFromAnimated(cursor) : Promise.resolve(sharpFromCursor(cursor))).then(
-                async ({hotSpot, sharp, size, frameCount, frameDuration}: IParsedCursor) => 
-                ([key, {
-                        hotSpot, size, frameCount, frameDuration,
-                        representations: [await sharp.png().toBuffer()] // TODO: add retina representations support
-                    }] as [WindowsCursorKeys, CapeCursor])
-            )
+        async ([key, {cursor, animated}]) => ([key, await buildCursor(cursor, animated)])
     )));
 
     const builtCursors = Object.entries(cursors).reduce((acc, [key, cursor]) => {
-        windowsCursorKeyToMac[key]!.map((e: MacCursorKeys) =>{
+        if (!windowsCursorKeyToMac[key]) acc[randomUUID().toUpperCase()] = windowsBuiltCursors[key];
+        else windowsCursorKeyToMac[key]!.map((e: MacCursorKeys) =>{
             acc[e] = windowsBuiltCursors[key]
         });
         return acc;

@@ -1,8 +1,9 @@
 export {buildMousecape} from "buildMousecape";
+export {buildCursor} from "buildCursor";
 export {stringifyMousecapeCursor} from "stringifyMousecapeCursor";
 export {stringifyMousecape} from "stringifyMousecape";
 export {sharpFromCursor, ParsedCursor} from "sharpFromCursor";
-export {compositeSharpFromAnimated} from "compositeSharpFromAnimated";
+export {compositeSharpFromAnimated, sharpFromAnimated} from "compositeSharpFromAnimated";
 
 export {
     parseAni, 
